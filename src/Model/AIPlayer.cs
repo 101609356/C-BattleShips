@@ -1,5 +1,10 @@
+using Microsoft.VisualBasic;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+//using System.Data;
+using System.Diagnostics;
 using SwinGameSDK;
-
 /// <summary>
 /// The AIPlayer is a type of player. It can readomly deploy ships, it also has the
 /// functionality to generate coordinates and shoot at tiles
@@ -11,11 +16,11 @@ public abstract class AIPlayer : Player
     /// Location can store the location of the last hit made by an
     /// AI Player. The use of which determines the difficulty.
     /// </summary>
-    public class Location
+    protected class Location
     {
         private int _Row;
-        private int _Column;
 
+        private int _Column;
         /// <summary>
         /// The row of the shot
         /// </summary>
@@ -23,14 +28,8 @@ public abstract class AIPlayer : Player
         /// <returns>The row of the shot</returns>
         public int Row
         {
-            get
-            {
-                return _Row;
-            }
-            set
-            {
-                _Row = value;
-            }
+            get { return _Row; }
+            set { _Row = value; }
         }
 
         /// <summary>
@@ -40,14 +39,8 @@ public abstract class AIPlayer : Player
         /// <returns>The column of the shot</returns>
         public int Column
         {
-            get
-            {
-                return _Column;
-            }
-            set
-            {
-                _Column = value;
-            }
+            get { return _Column; }
+            set { _Column = value; }
         }
 
         /// <summary>
@@ -69,7 +62,8 @@ public abstract class AIPlayer : Player
         /// <returns>true if location 1 and location 2 are at the same spot</returns>
         public static bool operator ==(Location @this, Location other)
         {
-            return @this != null && other != null && @this.Row == other.Row && @this.Column == other.Column;
+            return !ReferenceEquals(@this, null) && !ReferenceEquals(other, null) && ReferenceEquals(@this.Row, other.Row) && ReferenceEquals(@this.Column, other.Column);
+            //			return @this != null && other != null && @this.Row == other.Row && @this.Column == other.Column;
         }
 
         /// <summary>
@@ -80,14 +74,12 @@ public abstract class AIPlayer : Player
         /// <returns>true if location 1 and location 2 are not at the same spot</returns>
         public static bool operator !=(Location @this, Location other)
         {
-            return ReferenceEquals(@this, null) || ReferenceEquals(other, null) || @this.Row != other.Row || @this.Column != other.Column;
+            return ReferenceEquals(@this, null) || ReferenceEquals(other, null) || !ReferenceEquals(@this.Row, other.Row) || !ReferenceEquals(@this.Column, other.Column);
+            //return @this == null || other == null || @this.Row != other.Row || @this.Column != other.Column;
         }
     }
 
-    /// <summary>
-    /// Initializes a new instance of the AIplayer class.
-    /// </summary>
-    /// <param name="game">Game.</param>
+
     public AIPlayer(BattleShipsGame game) : base(game)
     {
     }
@@ -118,12 +110,15 @@ public abstract class AIPlayer : Player
         int row = 0;
         int column = 0;
 
-        do //keep hitting until a miss
+        //keep hitting until a miss
+        do
         {
             Delay();
 
-            GenerateCoords(ref row, ref column); //generate coordinates for shot
-            result = _game.Shoot(row, column); //take shot
+            GenerateCoords(ref row, ref column);
+            //generate coordinates for shot
+            result = _game.Shoot(row, column);
+            //take shot
             ProcessShot(row, column, result);
         } while (result.Value != ResultOfAttack.Miss && result.Value != ResultOfAttack.GameOver && !SwinGame.WindowCloseRequested());
 
@@ -140,9 +135,7 @@ public abstract class AIPlayer : Player
         {
             //Dont delay if window is closed
             if (SwinGame.WindowCloseRequested())
-            {
                 return;
-            }
 
             SwinGame.Delay(5);
             SwinGame.ProcessEvents();
