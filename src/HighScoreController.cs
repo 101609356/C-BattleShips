@@ -54,12 +54,13 @@ static class HighScoreController
 	/// The format is
 	/// # of scores
 	/// NNNSSS
-	/// 
+	///
 	/// Where NNN is the name and SSS is the score
 	/// </remarks>
 	private static void LoadScores()
 	{
 		string filename = null;
+		//Getting correct highscores file name.
 		filename = SwinGame.PathToResource("highscores.txt");
 
 		StreamReader input = default(StreamReader);
@@ -69,6 +70,7 @@ static class HighScoreController
 		int numScores = 0;
 		numScores = Convert.ToInt32(input.ReadLine());
 
+		//Must properly clear the score, previously missing.
 		_Scores.Clear();
 
 		int i = 0;
@@ -93,12 +95,13 @@ static class HighScoreController
 	/// The format is
 	/// # of scoressc
 	/// NNNSSS
-	/// 
+	///
 	/// Where NNN is the name and SSS is the score
 	/// </remarks>
 	private static void SaveScores()
 	{
 		string filename = null;
+		//Assign the correct file entry name for highscores.
 		filename = SwinGame.PathToResource("highscores.txt");
 
 		StreamWriter output = default(StreamWriter);
@@ -118,14 +121,15 @@ static class HighScoreController
 	/// </summary>
 	public static void DrawHighScores()
 	{
-		const int SCORES_HEADING = 40;
-		const int SCORES_TOP = 80;
-		const int SCORE_GAP = 30;
+		const int SCORES_HEADING = 60;
+		const int SCORES_TOP = 85;
+		const int SCORE_GAP = 35;
 
 		if (_Scores.Count == 0)
 			LoadScores();
 
-		SwinGame.DrawText("   High Scores   ", Color.White, GameResources.GameFont("Courier"), SCORES_LEFT, SCORES_HEADING);
+			//Altering heading values to better display the scores.
+		SwinGame.DrawText("  -- High Scores --  ", Color.LightBlue, GameResources.GameFont("Courier"), SCORES_LEFT, SCORES_HEADING);
 
 		//For all of the scores
 		int i = 0;
@@ -199,7 +203,7 @@ static class HighScoreController
 			_Scores.RemoveAt(_Scores.Count - 1);
 			_Scores.Add(s);
 			_Scores.Sort();
-			
+
 			SaveScores();
 			GameController.EndCurrentState();
 		}
