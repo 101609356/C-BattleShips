@@ -58,7 +58,8 @@ public static class GameResources
 
 	private static void LoadMusic()
 	{
-		NewMusic("Background", "horrordrone.mp3");
+		//New background music added.
+		NewMusic("Background", "empire_load_music.mp3");
 	}
 
 	/// <summary>
